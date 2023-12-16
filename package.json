@@ -4,10 +4,12 @@
   "description": "social media app",
   "main": "index.ts",
   "scripts": {
+    "start": "nodemon ./build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts && ./node_modules/.bin/bunyan",
     "lint": "eslint src/**/*.ts",
-    "format": "eslint src/**/*.ts --fix"
+    "format": "eslint src/**/*.ts --fix",
+    "build": "tsc -p ."
   },
   "author": "Rutvik Prajapati",
   "license": "ISC",
@@ -23,6 +25,7 @@
   },
   "dependencies": {
     "@socket.io/redis-adapter": "^8.2.1",
+    "@types/node": "^20.10.4",
     "bunyan": "^1.8.15",
     "compression": "^1.7.4",
     "cookie-session": "^2.0.0",
