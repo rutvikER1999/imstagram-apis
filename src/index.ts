@@ -21,7 +21,8 @@ class ImstagramApp {
     }
 
     private loadConfiguration(): void {
-        config.validateConfig()
+        config.validateConfig();
+        config.cloudinaryConfig();
     }
 }
 

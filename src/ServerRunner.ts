@@ -40,7 +40,7 @@ export class ServerRunner {
             keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
             maxAge: 24 * 7 * 3600000,
             secure: config.NODE_ENV !== 'development',
-        }))
+        }));
         app.use(hpp());
         app.use(helmet());
         app.use(cors({
@@ -103,7 +103,7 @@ export class ServerRunner {
     }
 
     private startHttpServer(httpServer: http.Server): void {
-        log.error("server has started with process", process.pid);
+        log.info("server has started with process", process.pid);
         httpServer.listen(SERVER_PORT, () => {
             log.info("Server running on port: ", SERVER_PORT)
         })

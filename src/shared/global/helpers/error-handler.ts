@@ -74,3 +74,11 @@ export class ServerError extends CustomError {
         super(message);
     }
 }
+
+export class JoiRequestValidationError extends CustomError {
+    statusCode = HTTP_STATUS.SERVICE_UNAVAILABLE;
+    status = "error";
+    constructor(message: string) {
+        super(message);
+    }
+}
