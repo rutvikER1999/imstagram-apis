@@ -23,7 +23,7 @@ withCredentials: true
 
 {
 "username": "dani",
-"password": "Dani@123"
+"password": "Pass@123"
 }
 
 ###
@@ -33,16 +33,16 @@ Accept: application/json
 withCredentials: true
 
 {
-  "email": ""
+  "email": "dani@test.com"
 }
 
 ###
-POST {{baseUrl}}/{{urlPath}}/reset-password/<token>
+POST {{baseUrl}}/{{urlPath}}/reset-password/59a6a224f69b96830d59e83bfac70d48d470e55c
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
 {
-  "password": "",
-  "confirmPassword": ""
+  "password": "Pass@123",
+  "confirmPassword": "Pass@123"
 }
