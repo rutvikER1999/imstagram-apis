@@ -1,5 +1,4 @@
 import clodinary, { UploadApiResponse, UploadApiErrorResponse } from "cloudinary";
-import { Promise } from "mongoose";
 
 export function uploads(
     file: string,

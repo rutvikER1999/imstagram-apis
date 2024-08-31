@@ -38,7 +38,7 @@ class Config {
     }
 
     public createLogger(name: string): bunyan {
-        return bunyan.createLogger({ name, level: "info" });
+        return bunyan.createLogger({ name });
     }
 
     public validateConfig(): void {
