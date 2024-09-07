@@ -1,0 +1,49 @@
+@baseUrl = http://localhost:5000
+@urlPath = api/v1
+
+###
+GET {{baseUrl}}/{{urlPath}}/post/reactions/66cc5d25ff80ab8a51451d40
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+###
+GET {{baseUrl}}/{{urlPath}}/post/single/reaction/username/Dani/66cc5d25ff80ab8a51451d40
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+###
+GET {{baseUrl}}/{{urlPath}}/post/reactions/username/Dani
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+###
+POST {{baseUrl}}/{{urlPath}}/post/reaction
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+# type - like | love | wow | happy | sad | angry
+# previousReaction (if it exist) - like | love | wow | happy | sad | angry
+# postReactions - increment new reaction by 1 and decrement previous reaction by 1
+
+{
+  "userTo": "66b918fa427dc672606e8c56",
+  "postId": "66cc5d25ff80ab8a51451d40",
+  "type": "love",
+  "previousReaction": "",
+  "postReactions": {"like": 0,"love": 2,"happy": 0,"sad": 0,"wow": 0,"angry": 0},
+  "profilePicture": "https://picsum.photos/200"
+}
+
+###
+DELETE {{baseUrl}}/{{urlPath}}/post/reaction/66cc5d25ff80ab8a51451d40/love/{"like": 0,"love": 0,"happy": 0,"sad": 0,"wow": 0,"angry": 0}
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{}
+
+

@@ -6,9 +6,10 @@ import { createBullBoard } from '@bull-board/api';
 import { config } from '../../../config';
 import { IAuthJob } from '../../../features/auth/interfaces/auth.interface';
 import { IUserJob, IEmailJob } from '../../../features/user/interfaces/user.interface';
-import { IPostJobData } from 'src/features/post/interfaces/post.interface';
+import { IPostJobData } from '../../../features/post/interfaces/post.interface';
+import { IReactionJob } from '../../../features/reactions/interfaces/reaction.interface';
 
-type IBaseJobData = IAuthJob | IUserJob | IEmailJob | IPostJobData
+type IBaseJobData = IAuthJob | IUserJob | IEmailJob | IPostJobData | IReactionJob
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
