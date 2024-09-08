@@ -15,6 +15,8 @@ import applicationRoutes from "./routes";
 import { CustomError, IErrorResponse } from "./shared/global/helpers/error-handler";
 import { config } from "./config";
 import { SocketIOPostHandler } from "./shared/sockets/post";
+import { SocketIOFollowerHandler } from "./shared/sockets/follower";
+import { SocketIOUserHandler } from "./shared/sockets/user";
 
 const SERVER_PORT = 5000;
 const log: Logger = config.createLogger("server");
@@ -112,6 +114,11 @@ export class ServerRunner {
 
     private socketIOConnections(io: Server): void {
         const postSocketHandler: SocketIOPostHandler = new SocketIOPostHandler(io);
+        const followerSocketHandler: SocketIOFollowerHandler = new SocketIOFollowerHandler(io);
+        const userSocketHandler: SocketIOUserHandler = new SocketIOUserHandler(io);
+
         postSocketHandler.listen();
+        followerSocketHandler.listen();
+        userSocketHandler.listen();
     }
 }

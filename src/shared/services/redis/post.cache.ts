@@ -5,8 +5,7 @@ import { ServerError } from '../../../shared/global/helpers/error-handler';
 import { ISavePostToCache, IPostDocument } from '../../../features/post/interfaces/post.interface';
 import { Helpers } from '../../../shared/global/helpers/helpers';
 import { RedisCommandRawReply } from '@redis/client/dist/lib/commands';
-// import { IReactions } from '@reaction/interfaces/reaction.interface';
-type IReactions = any;
+import { IReactions } from '../../../features/reactions/interfaces/reaction.interface';
 const log: Logger = config.createLogger('postCache');
 
 export type PostCacheMultiType = string | number | Buffer | RedisCommandRawReply[] | IPostDocument | IPostDocument[];
