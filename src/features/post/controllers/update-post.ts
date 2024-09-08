@@ -7,9 +7,9 @@ import { joinValidation } from '../../../shared/global/decorators/joiValidationD
 import { postSchema, postWithImageSchema, postWithVideoSchema } from '../schemes/post.schemes';
 import { IPostDocument } from '../interfaces/post.interface';
 import { UploadApiResponse } from 'cloudinary';
-import { uploads } from '../../../shared/global/helpers/cloudinaryUpload';
+import { uploads, videoUpload } from '../../../shared/global/helpers/cloudinaryUpload';
 import { BadRequestError } from '../../../shared/global/helpers/error-handler';
-// import { imageQueue } from '../../../shared/services/queues/image.queue';
+import { imageQueue } from '../../../shared/services/queues/image.queue';
 
 const postCache: PostCache = new PostCache();
 
@@ -57,10 +57,10 @@ export class Update {
     if (videoId && videoVersion) {
       Update.prototype.updatePost(req);
     } else {
-    //   const result: UploadApiResponse = await Update.prototype.addImageToExistingPost(req);
-    //   if (!result.public_id) {
-    //     throw new BadRequestError(result.message);
-    //   }
+      const result: UploadApiResponse = await Update.prototype.addImageToExistingPost(req);
+      if (!result.public_id) {
+        throw new BadRequestError(result.message);
+      }
     }
     res.status(HTTP_STATUS.OK).json({ message: 'Post with video updated successfully' });
   }
@@ -89,10 +89,9 @@ export class Update {
   private async addImageToExistingPost(req: Request): Promise<UploadApiResponse> {
     const { post, bgColor, feelings, privacy, gifUrl, profilePicture, image, video } = req.body;
     const { postId } = req.params;
-    // const result: UploadApiResponse = image
-    //   ? ((await uploads(image)) as UploadApiResponse)
-    //   : ((await videoUpload(video)) as UploadApiResponse);
-    const result: UploadApiResponse = ((await uploads(image)) as UploadApiResponse)
+    const result: UploadApiResponse = image
+      ? ((await uploads(image)) as UploadApiResponse)
+      : ((await videoUpload(video)) as UploadApiResponse);
     if (!result?.public_id) {
       return result;
     }
@@ -112,13 +111,13 @@ export class Update {
     const postUpdated: IPostDocument = await postCache.updatePostInCache(postId, updatedPost);
     socketIOPostObject.emit('update post', postUpdated, 'posts');
     postQueue.addPostJob('updatePostInDB', { key: postId, value: postUpdated });
-    // if (image) {
-    //   imageQueue.addImageJob('addImageToDB', {
-    //     key: `${req.currentUser!.userId}`,
-    //     imgId: result.public_id,
-    //     imgVersion: result.version.toString()
-    //   });
-    // }
+    if (image) {
+      imageQueue.addImageJob('addImageToDB', {
+        key: `${req.currentUser!.userId}`,
+        imgId: result.public_id,
+        imgVersion: result.version.toString()
+      });
+    }
     return result;
   }
 }
