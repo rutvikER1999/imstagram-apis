@@ -17,6 +17,8 @@ import { config } from "./config";
 import { SocketIOPostHandler } from "./shared/sockets/post";
 import { SocketIOFollowerHandler } from "./shared/sockets/follower";
 import { SocketIOUserHandler } from "./shared/sockets/user";
+import { SocketIONotificationHandler } from "./shared/sockets/notification";
+import { SocketIOImageHandler } from "./shared/sockets/image";
 
 const SERVER_PORT = 5000;
 const log: Logger = config.createLogger("server");
@@ -116,9 +118,13 @@ export class ServerRunner {
         const postSocketHandler: SocketIOPostHandler = new SocketIOPostHandler(io);
         const followerSocketHandler: SocketIOFollowerHandler = new SocketIOFollowerHandler(io);
         const userSocketHandler: SocketIOUserHandler = new SocketIOUserHandler(io);
-
+        const notificationSocketHandler: SocketIONotificationHandler = new SocketIONotificationHandler();
+        const imageSocketHandler: SocketIOImageHandler = new SocketIOImageHandler();
+    
         postSocketHandler.listen();
         followerSocketHandler.listen();
         userSocketHandler.listen();
+        notificationSocketHandler.listen(io);
+        imageSocketHandler.listen(io);
     }
 }

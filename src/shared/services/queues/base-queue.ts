@@ -10,8 +10,9 @@ import { IPostJobData } from '../../../features/post/interfaces/post.interface';
 import { IReactionJob } from '../../../features/reactions/interfaces/reaction.interface';
 import { ICommentJob } from '../../../features/comments/interfaces/comment.interface';
 import { IBlockedUserJobData, IFollowerJobData } from '../../../features/followers/interfaces/follower.interface';
+import { IFileImageJobData } from '../../../features/images/interfaces/image.interface';
 
-type IBaseJobData = IAuthJob | IUserJob | IEmailJob | IPostJobData | IReactionJob | ICommentJob | IBlockedUserJobData | IFollowerJobData
+type IBaseJobData = IAuthJob | IUserJob | IEmailJob | IPostJobData | IReactionJob | ICommentJob | IBlockedUserJobData | IFollowerJobData | IFileImageJobData
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
