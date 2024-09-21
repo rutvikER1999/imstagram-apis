@@ -85,3 +85,11 @@ export interface IAllUsers {
   users: IUserDocument[];
   totalUsers: number;
 }
+
+export interface ISearchUser {
+  _id: string;
+  profilePicture: string;
+  username: string;
+  email: string;
+  avatarColor: string;
+}
