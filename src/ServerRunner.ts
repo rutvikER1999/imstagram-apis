@@ -11,6 +11,7 @@ import { Server } from "socket.io";
 import { createClient } from "redis";
 import { createAdapter } from "@socket.io/redis-adapter";
 import 'express-async-errors';
+import apiStats from 'swagger-stats';
 import applicationRoutes from "./routes";
 import { CustomError, IErrorResponse } from "./shared/global/helpers/error-handler";
 import { config } from "./config";
@@ -35,6 +36,7 @@ export class ServerRunner {
         this.securityMiddleware(this.app);
         this.standardMiddleware(this.app);
         this.routeMiddleware(this.app);
+        this.apiMonitoring(this.app);
         this.globalErrorhandler(this.app);
         this.startServer(this.app);
     }
@@ -58,6 +60,14 @@ export class ServerRunner {
         }));
     }
 
+    private apiMonitoring(app: Application): void {
+        app.use(
+          apiStats.getMiddleware({
+            uriPath: '/api-monitoring'
+          })
+        );
+      }
+
     private standardMiddleware(app: Application): void {
         app.use(comppression());
         app.use(json({ limit: "50mb" }));
@@ -69,6 +79,9 @@ export class ServerRunner {
     }
 
     private async startServer(app: Application): Promise<void> {
+        if (!config.JWT_TOKEN) {
+            throw new Error('JWT_TOKEN must be provided');
+        }
         try {
             const httpServer: http.Server = new http.Server(app);
             const socketIo: Server = await this.createSocketIO(httpServer);
@@ -109,6 +122,7 @@ export class ServerRunner {
     }
 
     private startHttpServer(httpServer: http.Server): void {
+        log.info(`Worker with process id of ${process.pid} has started...`);
         log.info("server has started with process", process.pid);
         httpServer.listen(SERVER_PORT, () => {
             log.info("Server running on port: ", SERVER_PORT)

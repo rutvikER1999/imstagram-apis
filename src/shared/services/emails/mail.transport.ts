@@ -52,6 +52,31 @@ class MailTransport {
     }
 
     private async productionEmailSender(receiverEmail: string, subject: string, body: string): Promise<void> {
+        // const mailOptions: IMailOptions = {
+        //     from: `Chatty App <${config.SENDER_EMAIL!}>`,
+        //     to: receiverEmail,
+        //     subject,
+        //     html: body
+        // };
+
+        // try {
+        //     await sendGridMail.send(mailOptions);
+        //     log.info('Production email sent successfully.');
+        // } catch (error) {
+        //     log.error('Error sending email', error);
+        //     throw new BadRequestError('Error sending email');
+        // }
+
+        const transporter: Mail = nodemailer.createTransport({
+            host: 'gmail',
+            port: 587,
+            secure: true,
+            auth: {
+                user: config.SENDER_EMAIL!,
+                pass: config.SENDER_EMAIL_PASSWORD!
+            }
+        });
+
         const mailOptions: IMailOptions = {
             from: `Chatty App <${config.SENDER_EMAIL!}>`,
             to: receiverEmail,
@@ -60,7 +85,7 @@ class MailTransport {
         };
 
         try {
-            await sendGridMail.send(mailOptions);
+            await transporter.sendMail(mailOptions);
             log.info('Production email sent successfully.');
         } catch (error) {
             log.error('Error sending email', error);
