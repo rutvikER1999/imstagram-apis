@@ -104,7 +104,12 @@ export class UserCache extends BaseCache {
       if (!this.client.isOpen) {
         await this.client.connect();
       }
-      const response: string[] = await this.client.ZRANGE('user', start, end, { REV: true });
+      const response: string[] = await this.client.sendCommand([
+        'ZREVRANGEBYSCORE',
+        'user',
+        start.toString(),
+        end.toString(),
+      ]);
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
       for (const key of response) {
         if (key !== excludedUserKey) {
@@ -146,7 +151,7 @@ export class UserCache extends BaseCache {
       }
       const replies: IUserDocument[] = [];
       const followers: string[] = await this.client.LRANGE(`followers:${userId}`, 0, -1);
-      const users: string[] = await this.client.ZRANGE('user', 0, -1);
+      const users: string[] = await this.client.zRange('user', 0, -1);
       const randomUsers: string[] = Helpers.shuffle(users).slice(0, 10);
       for (const key of randomUsers) {
         const followerIndex = indexOf(followers, key);

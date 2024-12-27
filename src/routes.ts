@@ -1,5 +1,6 @@
 import { Application } from "express";
 import { authRoutes } from "./features/auth/routes/authRoutes";
+import { currentUserRoutes } from "./features/auth/routes/currentRoutes";
 import { serverAdapter } from "./shared/services/queues/base-queue";
 import { authMiddleware } from "./shared/global/helpers/auth-middleware";
 import { postRoutes } from "./features/post/routes/postRoutes";
@@ -34,6 +35,7 @@ export default (app: Application) => {
         app.use(BASE_PATH, authMiddleware.verifyUser, imageRoutes.routes());
         app.use(BASE_PATH, authMiddleware.verifyUser, chatRoutes.routes());
         app.use(BASE_PATH, authMiddleware.verifyUser, userRoutes.routes());
+        app.use(BASE_PATH, authMiddleware.verifyUser, currentUserRoutes.routes());
 
     };
     routes();
