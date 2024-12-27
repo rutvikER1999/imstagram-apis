@@ -4,13 +4,17 @@
   "description": "social media app",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon ./build/index.js",
+    "start": "NODE_ENV=production pm2 start ./build/index.js -i 5 --attach --watch | ./node_modules/.bin/bunyan",
+    "start:dev": "pm2 start build/index.js -i 5 --attach --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "stop": "pm2 stop all",
+    "delete": "pm2 delete all",
     "dev": "nodemon src/index.ts && ./node_modules/.bin/bunyan",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
     "build": "tsc -p .",
-    "seeds:dev": "npx ts-node src/seeds.ts"
+    "seeds:dev": "npx ts-node src/seeds.ts",
+    "seeds:prod": "npx ts-node ./build/src/seeds.js"
   },
   "author": "Rutvik Prajapati",
   "license": "ISC",
@@ -29,6 +33,7 @@
     "@types/lodash": "^4.17.4",
     "@types/mongoose": "^5.11.97",
     "@types/nodemailer": "^6.4.15",
+    "@types/swagger-stats": "^0.95.11",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
@@ -63,6 +68,7 @@
     "mongoose": "^8.0.3",
     "nodemailer": "^6.9.14",
     "redis": "^4.6.11",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "swagger-stats": "^0.99.7"
   }
 }

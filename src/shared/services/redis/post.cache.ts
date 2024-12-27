@@ -153,7 +153,12 @@ export class PostCache extends BaseCache {
         await this.client.connect();
       }
 
-      const reply: string[] = await this.client.ZRANGE(key, start, end, { REV: true });
+      const reply: string[] = await this.client.sendCommand([
+        'ZREVRANGEBYSCORE',
+        key,
+        start.toString(),
+        end.toString(),
+      ]);
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
       for (const value of reply) {
         multi.HGETALL(`posts:${value}`);
@@ -180,9 +185,13 @@ export class PostCache extends BaseCache {
       if (!this.client.isOpen) {
         await this.client.connect();
       }
-
-      const reply: string[] = await this.client.ZRANGE(key, uId, uId, { REV: true, BY: 'SCORE' });
-      const multi: ReturnType<typeof this.client.multi> = this.client.multi();
+      const reply: string[] = await this.client.sendCommand([
+        'ZREVRANGEBYSCORE',
+        key,
+        uId.toString(),
+        uId.toString(),
+      ]);
+      const multi = this.client.multi();
       for (const value of reply) {
         multi.HGETALL(`posts:${value}`);
       }
@@ -200,6 +209,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
+  
 
   public async getTotalUserPostsInCache(uId: number): Promise<number> {
     try {
